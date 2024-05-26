@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         node-version:
           - 18.x
           - 20.x
@@ -22,6 +22,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Ensure line endings are consistent
         run: git config --global core.autocrlf input
+      - name: Support longpaths
+        run: git config --global core.longpaths true
       - name: Check out repository
         uses: actions/checkout@v3
       - name: Load cache
@@ -33,6 +35,7 @@ jobs:
             .rdf-test-suite-ldf-cache
           key: ${{ runner.os }}-test-modules-${{ secrets.CACHE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
       - name: Setup firefox
+        id: setup-firefox
         uses: browser-actions/setup-firefox@latest
         with:
           firefox-version: latest
@@ -52,6 +55,8 @@ jobs:
           timeout_minutes: 2
           max_attempts: 3
           command: yarn run test:browser
+        env:
+          FIREFOX_BIN: ${{ steps.setup-firefox.outputs.firefox-path }}
       - name: Submit coverage results
         uses: coverallsapp/github-action@master
         with:
