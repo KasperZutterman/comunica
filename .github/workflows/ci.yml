@@ -39,8 +39,6 @@ jobs:
         uses: browser-actions/setup-firefox@latest
         with:
           firefox-version: latest
-      - name: Set FIREFOX_BIN
-        run: FIREFOX_BIN = ${{ steps.setup-firefox.outputs.firefox-path }}
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build project
@@ -57,6 +55,7 @@ jobs:
           timeout_minutes: 2
           max_attempts: 3
           command: yarn run test:browser
+          firefox_bin: ${{ steps.setup-firefox.outputs.firefox-path }}
       - name: Submit coverage results
         uses: coverallsapp/github-action@master
         with:
