@@ -55,6 +55,7 @@ jobs:
           timeout_minutes: 2
           max_attempts: 3
           command: yarn run test:browser
+        env:
           FIREFOX_BIN: ${{ steps.setup-firefox.outputs.firefox-path }}
       - name: Submit coverage results
         uses: coverallsapp/github-action@master
