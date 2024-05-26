@@ -23,7 +23,7 @@ jobs:
       - name: Ensure line endings are consistent
         run: git config --global core.autocrlf input
       - name: Support longpaths
-        run: sudo git config --system core.longpaths true
+        run: git config --system core.longpaths true
       - name: Check out repository
         uses: actions/checkout@v3
       - name: Load cache
